@@ -1,74 +1,37 @@
-## Dagger sources are not regenerated when sources change.
+## kapt runs even when there's no annotation processors in the kapt configuration
 
-With the changes made to kapt in 1.3.31, kotlin does some aggressive caching to decrease incremental built times. Unfortunately, some annotation processors is use namely Dagger and Butterknife, don’t work well together and kapt since the cache is not properly invalidated in some conditions.
-- Deleted classes with `@Inject` may still have code generated for them.
-- Moved classes with `@Inject` may still have code generated in the old location.
-
-This behavior is enabled by default in Kotlin 1.3.31. Is there something I need to configure kapt to ensure the cache is properly invalidated?
-This is causing some issues for my team, especially when we switch between branches.
+In this sample project kapt can account for as much as 10% of the build tile despite not having any
+annotation processors to run.
 
 ## Steps to reproduce.
 
 
-### Build the project a few times
-
 ```bash
- $ ./gradlew :app:assembleDebug
+ $ ./gradlew :app:assembleDebug --scan
 ```
-
-Run this command 3 times to ensure Gradle daemon is warmed and compilation is cache.
-
-
-### Modify Dagger's configuration
-
-Delete the lines below from `MainActivity.kt`:
-
-```
-    @Inject
-    lateinit var someDependency: SomeDependency
-```
-
-### Build the project again
-
-```bash
- $ ./gradlew :app:assembleDebug
-```
-
 
 ### Observe
 
-Compilation crashes with this error:
+These two kapt tasks run:
 
 ```
-> Task :app:compileDebugJavaWithJavac FAILED
-/android-bugs/app/build/generated/source/kapt/debug/com/example/tevjef/gradienttest/MainActivity_MembersInjector.java:25: error: cannot find symbol
-    instance.someDependency = someDependency;
-            ^
-  symbol:   variable someDependency
-  location: variable instance of type MainActivity
-1 error
+:app:kaptGenerateStubsDebugKotlin   2.814s  0.614s	org.jetbrains.kotlin.gradle.internal.KaptGenerateStubsTask
+:app:kaptDebugKotlin    3.429s	0.149s	org.jetbrains.kotlin.gradle.internal.KaptWithoutKotlincTask
+
 ```
 
-### Additional issues
+I expect kapt to run only when annotation processors are in the kapt configuration. Expecially with this flag defined:
 
-Running clean then building the project does cause kapt to regenerate sources to clean up the now unused inject.
-
-```bash
- $ ./gradlew clean :app:assembleDebug
+```
+kapt.include.compile.classpath=false
 ```
 
 #### What works!
 
-```bash
- $ ./gradlew --no-build-cache clean :app:assembleDebug
-```
-
-I have no concrete evidence of this but it believe the issue is due to `kapt.incremental.apt=true`.
+Not applying the kapt-plugin on modules with an annotation processor.
 
 #### Additional details
 
-[./gradlew :app:assembleDebug --debug](https://github.com/tevjef/android-bugs/blob/kapt_cache_bug/debug.txt)
+[./gradlew :app:assembleDebug --debug](https://github.com/tevjef/android-bugs/blob/kapt_runs_enexpectedly/debug.txt)
 
-[Gradle Build Scan](https://scans.gradle.com/s/yy74q5rwzz4ei)
-
-This issue also exists on `1.3.40-dev-2527`
+[Gradle Build Scan](https://scans.gradle.com/s/wh7mid6etr2je)

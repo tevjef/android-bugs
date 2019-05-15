@@ -15,12 +15,11 @@ android {
     }
 }
 
+
 dependencies {
     implementation 'androidx.core:core:1.1.0-alpha05'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.0-alpha5'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.google.dagger:dagger-android:2.22.1'
-    kapt 'com.google.dagger:dagger-compiler:2.22.1'
 }
 
 repositories {
