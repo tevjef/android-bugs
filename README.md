@@ -1,3 +1,15 @@
-## Vector with ColorStateList tint does not lookup theme attribute
+# Assisted Factory KSP bug reproducer
 
-![Bug](github/image.png)
+https://github.com/google/dagger/issues/4054
+
+### Reproduction setups
+
+```bash
+    git clone -b dagger_assisted_factory_bug git@github.com:tevjef/android-bugs.git
+    
+    cd android-bugs
+    
+    chmod +x bug.sh
+    
+    ./bug.sh
+```
