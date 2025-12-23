@@ -1,0 +1,39 @@
+[versions]
+kotlin = "2.2.21"
+androidBuildToolsPlugin = "8.11.0"
+androidCompileSdk = "36"
+androidMinSdk = "24"
+androidTargetSdk = "35"
+circuit = "0.33.1"
+composeBom = "2025.07.00"
+metro = "0.8.0"
+kotlinSymbolProcessing = "2.3.3"
+jdkVersion = "11"
+
+[libraries]
+circuitBackstack = { module = "com.slack.circuit:circuit-backstack", version.ref = "circuit" }
+circuitFoundation = { module = "com.slack.circuit:circuit-foundation", version.ref = "circuit" }
+circuitRuntime = { module = "com.slack.circuit:circuit-runtime", version.ref = "circuit" }
+circuitCodegen = { module = "com.slack.circuit:circuit-codegen", version.ref = "circuit" }
+circuitRuntimePresenter = { module = "com.slack.circuit:circuit-runtime-presenter", version.ref = "circuit" }
+circuitRuntimeUi = { module = "com.slack.circuit:circuit-runtime-ui", version.ref = "circuit" }
+circuitAnnotations = { module = "com.slack.circuit:circuit-codegen-annotations", version.ref = "circuit" }
+circuitGestureNavigation = { module = "com.slack.circuit:circuitx-gesture-navigation", version.ref = "circuit" }
+
+composeBom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
+composeActivity = { module = "androidx.activity:activity-compose", version = "1.10.1" }
+composeAnimation = { module = "androidx.compose.animation:animation" }
+composeFoundation = { module = "androidx.compose.foundation:foundation" }
+composeMaterial3 = { module = "androidx.compose.material3:material3" }
+composeRuntime = { module = "androidx.compose.runtime:runtime" }
+composeUI = { module = "androidx.compose.ui:ui" }
+composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+kotlinCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.2" }
+kotlinUuid = { module = "com.benasher44:uuid", version = "0.8.4" }
+
+[plugins]
+kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+androidApplication = { id = "com.android.application", version.ref = "androidBuildToolsPlugin" }
+composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
