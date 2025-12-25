@@ -76,7 +76,7 @@ class CounterPresenter @AssistedInject constructor(
 
 @CircuitInject(CounterScreen::class, AppScope::class)
 @Composable
-fun Counter(state: CounterScreen.CounterState, modifier: Modifier) {
+fun CounterUi(state: CounterScreen.CounterState, modifier: Modifier) {
     Box(modifier.fillMaxSize().background(Color.White)) {
         Column(Modifier.align(Alignment.Center)) {
             Text(

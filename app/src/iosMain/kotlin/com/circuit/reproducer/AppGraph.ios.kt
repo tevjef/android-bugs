@@ -4,11 +4,11 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.DependencyGraph
 import dev.zacsweers.metro.createGraph
 
-fun initAndroidGraph(): AppGraph {
-    rootAppGraph = createGraph<AndroidAppGraph>()
-    return rootAppGraph!!
+fun initIosGraph() {
+    val iosGraph = createGraph<IOSAppGraph>()
+    rootAppGraph = iosGraph
 }
 
 @DependencyGraph(AppScope::class)
-interface AndroidAppGraph : AppGraph
+interface IOSAppGraph : AppGraph
 

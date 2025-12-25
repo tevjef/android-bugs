@@ -1,13 +1,15 @@
 import org.jetbrains.kotlin.gradle.plugin.KotlinPlatformType
+import org.jetbrains.kotlin.gradle.plugin.mpp.apple.XCFramework
+import java.util.Locale
 
 plugins {
     alias(libs.plugins.kotlin)
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeCompiler)
-    id("com.google.devtools.ksp") version "2.3.0"
-    id("org.jetbrains.compose") version "1.9.3"
-    id("dev.zacsweers.metro") version "0.8.0"
-    id("org.jetbrains.kotlin.plugin.parcelize")
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.metro)
+    alias(libs.plugins.kotlinParcelize)
 }
 
 android {
@@ -29,9 +31,21 @@ android {
 }
 
 kotlin {
+    val xcframeworkName = "Shared"
+    val xcf = XCFramework(xcframeworkName)
+
     androidTarget()
 
-    compilerOptions {
+    listOf(
+        iosArm64(),
+        iosSimulatorArm64(),
+    ).forEach { iosTarget ->
+        iosTarget.binaries.framework {
+            baseName = xcframeworkName
+            binaryOption("bundleId", "com.circuit.reproducer.${xcframeworkName}")
+            xcf.add(this)
+            isStatic = true
+        }
     }
 
     sourceSets {
@@ -45,17 +59,15 @@ kotlin {
                 implementation(libs.circuitRuntimeUi)
                 implementation(libs.circuitAnnotations)
                 implementation(libs.circuitGestureNavigation)
-                // Uncomment to use working version that's defined transitively
-                implementation("org.jetbrains.compose.runtime:runtime-saveable:1.10.0-rc02")
-                // implementation("androidx.compose.runtime:runtime-saveable:1.10.0")
 
                 // Compose
-                implementation(compose.animation)
-                implementation(compose.foundation)
-                implementation(compose.material3)
-                implementation(compose.runtime)
-                implementation(compose.ui)
-                implementation(project.dependencies.platform(libs.composeBom))
+                implementation(libs.jbComposeAnimation)
+                implementation(libs.jbComposeRuntime)
+                implementation(libs.jbComposeUiToolingPreview)
+                implementation(libs.jbComposeFoundation)
+                implementation(libs.jbComposeMaterial)
+                implementation(libs.jbComposeMaterial3)
+                implementation(libs.jbComposeUi)
 
                 // Coroutines
                 implementation(libs.kotlinCoroutinesCore)
@@ -89,8 +101,17 @@ ksp {
     arg("circuit.codegen.mode", "metro")
 }
 
+fun String.capitalizeUS() = replaceFirstChar {
+    if (it.isLowerCase()) it.titlecase(Locale.US) else it.toString()
+}
+
+val kspTargets = kotlin.targets.names.map { it.capitalizeUS() }
+
 dependencies {
-    add("kspAndroid", "com.slack.circuit:circuit-codegen:0.31.0")
-    add("kspCommonMainMetadata", "com.slack.circuit:circuit-codegen:0.31.0")
+    for (target in kspTargets) {
+        val targetConfigSuffix = if (target == "Metadata") "CommonMainMetadata" else target
+        println("####### ksp${targetConfigSuffix}")
+        add("ksp${targetConfigSuffix}", libs.circuitCodegen)
+    }
 }
 

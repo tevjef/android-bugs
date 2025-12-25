@@ -10,14 +10,15 @@ import dev.zacsweers.metro.Provides
 
 @ContributesTo(AppScope::class)
 @BindingContainer
-class UIBindings {
+class CircuitBindings {
 
     @Provides
-    fun providesCircuit(presenterFactories: Set<Presenter.Factory>, uiFactories: Set<Ui.Factory>): Circuit {
-        return Circuit.Builder()
-            .addPresenterFactories(presenterFactories)
-            .addUiFactories(uiFactories)
-            .build()
-    }
+    fun providesCircuit(
+        presenterFactories: Set<Presenter.Factory>,
+        uiFactories: Set<Ui.Factory>
+    ): Circuit = Circuit.Builder()
+        .addPresenterFactories(presenterFactories)
+        .addUiFactories(uiFactories)
+        .build()
 }
 

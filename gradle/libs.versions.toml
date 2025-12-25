@@ -1,13 +1,17 @@
 [versions]
-kotlin = "2.2.21"
+# note: kotlinx-parcelize was not publised for 2.3.20-dev-5437
+kotlin = "2.3.20-dev-7692"
 androidBuildToolsPlugin = "8.11.0"
 androidCompileSdk = "36"
 androidMinSdk = "24"
 androidTargetSdk = "35"
-circuit = "0.31.0"
-composeBom = "2025.07.00"
-metro = "0.8.0"
-kotlinSymbolProcessing = "2.3.3"
+circuit = "0.32.0-alpha02-composejb-1.10.0-rc02"
+composeBom = "2025.12.01"
+composeMultiplatform = "1.9.3"
+composeMultiplatformMaterial3 = "1.9.0"
+composeMultiplatformUi = "1.10.0-rc02"
+metro = "0.9.2"
+ksp = "2.3.4"
 jdkVersion = "11"
 
 [libraries]
@@ -29,6 +33,15 @@ composeRuntime = { module = "androidx.compose.runtime:runtime" }
 composeUI = { module = "androidx.compose.ui:ui" }
 composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview" }
 
+# JetBrains Compose Multiplatform
+jbComposeAnimation = { module = "org.jetbrains.compose.animation:animation", version.ref = "composeMultiplatform" }
+jbComposeRuntime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "composeMultiplatform" }
+jbComposeUiToolingPreview = { module = "org.jetbrains.compose.components:components-ui-tooling-preview", version.ref = "composeMultiplatform" }
+jbComposeFoundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "composeMultiplatform" }
+jbComposeMaterial = { module = "org.jetbrains.compose.material:material", version.ref = "composeMultiplatform" }
+jbComposeMaterial3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "composeMultiplatformMaterial3" }
+jbComposeUi = { module = "org.jetbrains.compose.ui:ui", version.ref = "composeMultiplatformUi" }
+
 kotlinCoroutinesCore = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version = "1.10.2" }
 kotlinUuid = { module = "com.benasher44:uuid", version = "0.8.4" }
 
@@ -36,4 +49,8 @@ kotlinUuid = { module = "com.benasher44:uuid", version = "0.8.4" }
 kotlin = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 androidApplication = { id = "com.android.application", version.ref = "androidBuildToolsPlugin" }
 composeCompiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+composeMultiplatform = { id = "org.jetbrains.compose", version.ref = "composeMultiplatform" }
+ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
+kotlinParcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 
